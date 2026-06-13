@@ -755,7 +755,7 @@
         const res = await fetch('https://api.github.com/users/ajjs1ajjs/repos?sort=updated&per_page=20');
         const repos = await res.json();
 
-        const exclude = ['Site'];
+        const exclude = ['Site', 'Announcer'];
         const filtered = repos.filter(r => !exclude.includes(r.name) && !r.fork);
         const langs = new Set();
         const topics = new Set();
