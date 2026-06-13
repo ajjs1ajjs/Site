@@ -746,7 +746,8 @@
       'RDM': 'images/RDM.jpg',
       'Sales': 'images/Sales.jpg',
       'SRE-DevOps-Books': 'images/SRE-DevOps-Books.jpg',
-      'Uptime-Monitor': 'images/Uptime-Monitor.jpg'
+      'Uptime-Monitor': 'images/Uptime-Monitor.jpg',
+      'Announcer': 'images/Announcer.png'
     };
 
     // === Fetch real data from GitHub API ===
@@ -760,7 +761,7 @@
         const res = await fetch('https://api.github.com/users/ajjs1ajjs/repos?sort=updated&per_page=20');
         const repos = await res.json();
 
-        const exclude = ['Site', 'Announcer'];
+        const exclude = ['Site'];
         const filtered = repos.filter(r => !exclude.includes(r.name) && !r.fork);
         const langs = new Set();
         const topics = new Set();
@@ -818,35 +819,6 @@
         document.getElementById('starCount').textContent = totalStars;
 
         document.querySelectorAll('.skeleton-card').forEach(s => s.remove());
-
-        // Static card: Announcer (image preview)
-        const staticCard = document.createElement('div');
-        staticCard.className = 'project-card';
-        staticCard.style.transitionDelay = `${filtered.length * 0.06}s`;
-        staticCard.innerHTML = `
-          <div class="preview">
-            <img src="images/Announcer.png" alt="Announcer" class="preview-img" style="object-fit: cover;">
-            <div class="preview-grid"></div>
-            <div class="preview-glow"></div>
-            <span class="lang-color" style="background: #ffd43b"></span>
-            <span class="stars-badge">★ 1</span>
-          </div>
-          <div class="body">
-            <span class="lang-tag" style="background: #ffd43b22; color: #ffd43b">Python</span>
-            <h3>Announcer</h3>
-            <p>Спортивний дайджест Футбол та Бокс</p>
-            <div class="card-footer">
-              <div class="stats">
-                <span>★ 1</span>
-                <span>⑂ 0</span>
-              </div>
-              <a href="https://github.com/ajjs1ajjs/Announcer" target="_blank">View →</a>
-            </div>
-          </div>
-        `;
-        staticCard.addEventListener('click', () => window.open('https://github.com/ajjs1ajjs/Announcer', '_blank'));
-        grid.appendChild(staticCard);
-        setTimeout(() => staticCard.classList.add('visible'), 100 + filtered.length * 80);
 
         const skillsGrid = document.getElementById('skillsGrid');
         const allSkills = [...new Set([...langs, ...topics])];
