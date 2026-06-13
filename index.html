@@ -68,6 +68,50 @@
       .nav { height: 56px; gap: 0; justify-content: flex-start; padding: 0 16px; overflow-x: auto; gap: 20px; -webkit-overflow-scrolling: touch; }
       .nav a { font-size: 0.8rem; white-space: nowrap; }
     }
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 40px 24px;
+    }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 12px; }
+    .hero h1 span { background: linear-gradient(135deg, var(--grad2), var(--grad3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero .role { font-size: clamp(1rem, 2vw, 1.3rem); color: var(--text2); margin-bottom: 8px; font-weight: 500; }
+    .hero .tagline { font-size: 1rem; color: #6666aa; max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-cta a { padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.35s; }
+    .hero-cta .primary { background: linear-gradient(135deg, var(--grad2), var(--grad3)); color: #fff; }
+    .hero-cta .primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124,58,237,0.3); }
+    .hero-cta .secondary { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid rgba(255,255,255,0.08); }
+    .hero-cta .secondary:hover { border-color: var(--accent2); background: rgba(6,182,212,0.08); transform: translateY(-3px); }
+    .hero .scroll-indicator {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      color: var(--text2); font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.4;
+      animation: bob 2s ease-in-out infinite;
+    }
+    @keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 32px;
+    }
+    .filter-bar button {
+      padding: 6px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.06);
+      background: var(--surface); color: var(--text2); font-size: 0.78rem; font-weight: 500;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .filter-bar button:hover { border-color: rgba(124,58,237,0.3); color: var(--text); }
+    .filter-bar button.active { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.4); color: var(--text); }
+
+    .scroll-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 99;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--surface); border: 1px solid rgba(255,255,255,0.06);
+      color: var(--text2); font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s; opacity: 0; pointer-events: none;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: auto; }
+    .scroll-top:hover { border-color: var(--accent2); background: rgba(6,182,212,0.08); transform: translateY(-3px); }
+
     canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
 
     .container {
@@ -79,6 +123,7 @@
     }
 
     .container:first-of-type { padding-top: 80px; }
+    .hero + .container { padding-top: 40px; }
     section { padding-bottom: 40px; }
     section:last-of-type { padding-bottom: 0; }
 
@@ -457,6 +502,8 @@
     @media (max-width: 600px) {
       .container { padding: 0 16px; }
       .container:first-of-type { padding-top: 40px; }
+      .hero { min-height: calc(100vh - 56px); padding: 24px 16px; }
+      .hero .scroll-indicator { display: none; }
       .projects-grid { grid-template-columns: 1fr; }
       .stats-row { gap: 32px; padding: 24px; }
       .stats-row .stat-item h2 { font-size: 2.2rem; }
@@ -477,10 +524,27 @@
     <a href="#contact">Contact</a>
   </nav>
 
+  <section class="hero">
+    <div>
+      <h1><span>Yaroslav</span> Andreichuk</h1>
+      <div class="role">✦ SRE/DevOps Infrastructure Engineer</div>
+      <p class="tagline">Infrastructure as code, cloud-native observability, and automation — designed for reliability at scale.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="primary">View Projects</a>
+        <a href="#contact" class="secondary">Get in Touch</a>
+      </div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+    </div>
+  </section>
+
   <div class="container">
     <section id="projects">
       <h2 class="section-title"><span>Projects</span></h2>
       <p class="section-subtitle">Open source tools for infrastructure, monitoring, and automation</p>
+      <div class="filter-bar" id="filterBar"></div>
       <div class="projects-grid" id="projectsGrid">
         <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
         <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
@@ -554,6 +618,8 @@
       </div>
     </section>
   </div>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
 
   <footer class="footer">
     © 2026 Yaroslav Andreichuk · Built with Three.js, GitHub API & ☕
@@ -819,6 +885,7 @@
 
           const card = document.createElement('div');
           card.className = 'project-card';
+          card.dataset.lang = lang;
           card.style.transitionDelay = `${i * 0.06}s`;
           const imgPath = projectImages[repo.name];
           const hasImg = imgPath !== undefined;
@@ -857,6 +924,23 @@
 
         document.querySelectorAll('.skeleton-card').forEach(s => s.remove());
 
+        // Filter bar
+        const filterBar = document.getElementById('filterBar');
+        const allLangs = ['All', ...langs];
+        allLangs.forEach(l => {
+          const btn = document.createElement('button');
+          btn.textContent = l;
+          if (l === 'All') btn.classList.add('active');
+          btn.addEventListener('click', () => {
+            filterBar.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            grid.querySelectorAll('.project-card').forEach(c => {
+              c.style.display = l === 'All' || c.dataset.lang === l ? '' : 'none';
+            });
+          });
+          filterBar.appendChild(btn);
+        });
+
         const skillsGrid = document.getElementById('skillsGrid');
         const allSkills = [...new Set([...langs, ...topics])];
         allSkills.forEach(skill => {
@@ -876,6 +960,13 @@
         document.getElementById('starCount').textContent = '—';
       }
     }
+
+    // === Scroll to top ===
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     loadProjects();
 
