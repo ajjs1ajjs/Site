@@ -398,14 +398,7 @@
       border-top: 1px solid rgba(255,255,255,0.04);
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(10px); }
-    }
+
 
     @media (max-width: 600px) {
       .container { padding: 0 16px; }
@@ -485,8 +478,8 @@
           <a href="mailto:yaroslav.andreichuk@gmail.com">
             <span>Email</span>
           </a>
-          <a href="https://ajjs1ajjs.github.io/Site/" target="_blank">
-            <span>Website</span>
+          <a href="https://github.com/ajjs1ajjs/Site" target="_blank">
+            <span>Source</span>
           </a>
         </div>
       </div>
@@ -558,10 +551,8 @@
     document.addEventListener('touchmove', e => {
       if (e.touches.length) { mx = (e.touches[0].clientX / window.innerWidth) * 2 - 1; my = -(e.touches[0].clientY / window.innerHeight) * 2 + 1; }
     });
-    let t = 0;
     function anim() {
       requestAnimationFrame(anim);
-      t += 0.003;
       points.rotation.x += (my * 0.12 - points.rotation.x) * 0.02;
       points.rotation.y += (mx * 0.12 - points.rotation.y) * 0.02;
       points.rotation.z += 0.0003;
