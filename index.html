@@ -25,6 +25,8 @@
       --grad2: #7c3aed;
       --grad3: #06b6d4;
     }
+    ::selection { background: rgba(124,58,237,0.35); color: #fff; }
+    :focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; border-radius: 4px; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
@@ -32,6 +34,10 @@
       color: var(--text);
       overflow-x: hidden;
     }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #1f1f30; }
     canvas#bg { position: fixed; top: 0; left: 0; z-index: 0; pointer-events: none; }
 
     .container {
@@ -43,6 +49,8 @@
     }
 
     .container:first-of-type { padding-top: 80px; }
+    section { padding-bottom: 40px; }
+    section:last-of-type { padding-bottom: 0; }
 
     .section-title {
       font-size: 2.2rem;
@@ -398,7 +406,23 @@
       border-top: 1px solid rgba(255,255,255,0.04);
     }
 
-
+    .skeleton-card {
+      background: var(--surface);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.05);
+      overflow: hidden;
+      animation: sh 1.4s ease-in-out infinite;
+    }
+    .skeleton-card .sk-preview { height: 200px; background: var(--surface2); }
+    .skeleton-card .sk-body { padding: 20px 24px 24px; }
+    .skeleton-card .sk-tag { width: 60px; height: 22px; border-radius: 12px; background: var(--surface2); margin-bottom: 10px; }
+    .skeleton-card .sk-title { width: 70%; height: 22px; border-radius: 6px; background: var(--surface2); margin-bottom: 8px; }
+    .skeleton-card .sk-desc { width: 100%; height: 14px; border-radius: 6px; background: var(--surface2); margin-bottom: 8px; }
+    .skeleton-card .sk-desc:last-of-type { width: 55%; }
+    .skeleton-card .sk-footer { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; }
+    .skeleton-card .sk-stat { width: 50px; height: 16px; border-radius: 6px; background: var(--surface2); }
+    .skeleton-card .sk-link { width: 60px; height: 16px; border-radius: 6px; background: var(--surface2); }
+    @keyframes sh { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     @media (max-width: 600px) {
       .container { padding: 0 16px; }
@@ -407,6 +431,7 @@
       .stats-row { gap: 32px; padding: 24px; }
       .stats-row .stat-item h2 { font-size: 2.2rem; }
       .project-card .preview { height: 140px; }
+      .skeleton-card .sk-preview { height: 140px; }
       .about-card { padding: 32px 20px; }
       .skills-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
     }
@@ -419,7 +444,14 @@
     <section id="projects">
       <h2 class="section-title"><span>Projects</span></h2>
       <p class="section-subtitle">Open source tools for infrastructure, monitoring, and automation</p>
-      <div class="projects-grid" id="projectsGrid"></div>
+      <div class="projects-grid" id="projectsGrid">
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+        <div class="skeleton-card"><div class="sk-preview"></div><div class="sk-body"><div class="sk-tag"></div><div class="sk-title"></div><div class="sk-desc"></div><div class="sk-desc"></div><div class="sk-footer"><div class="sk-stat"></div><div class="sk-link"></div></div></div></div>
+      </div>
 
       <div class="stats-row" id="statsRow">
         <div class="stat-item">
@@ -567,27 +599,9 @@
     });
 
     // === Preview renderer ===
-    function hexToHSL(hex) {
-      let r = 0, g = 0, b = 0;
-      if (hex && /^#[0-9a-f]{6}$/i.test(hex)) {
-        r = parseInt(hex[1] + hex[2], 16) / 255;
-        g = parseInt(hex[3] + hex[4], 16) / 255;
-        b = parseInt(hex[5] + hex[6], 16) / 255;
-      }
-      const max = Math.max(r, g, b), min = Math.min(r, g, b);
-      let h = 270, s = 60, l = (max + min) / 2;
-      if (max !== min) {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) { case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break; case g: h = ((b - r) / d + 2) / 6; break; case b: h = ((r - g) / d + 4) / 6; break; }
-      }
-      return { h: h * 360, s: s * 100, l: l * 100 };
-    }
-
     function renderRepoPreview(canvas, name, color, desc) {
       const w = canvas.width, h = canvas.height;
       const ctx = canvas.getContext('2d');
-      const hsl = hexToHSL(color);
       const gap = 16, r = 10;
 
       // rounded clip
@@ -803,6 +817,8 @@
         document.getElementById('langCount').textContent = langs.size;
         document.getElementById('starCount').textContent = totalStars;
 
+        document.querySelectorAll('.skeleton-card').forEach(s => s.remove());
+
         // Static card: Announcer (image preview)
         const staticCard = document.createElement('div');
         staticCard.className = 'project-card';
@@ -845,6 +861,7 @@
         });
 
       } catch (err) {
+        document.querySelectorAll('.skeleton-card').forEach(s => s.remove());
         document.getElementById('repoCount').textContent = '—';
         document.getElementById('langCount').textContent = '—';
         document.getElementById('starCount').textContent = '—';
